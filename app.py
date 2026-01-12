@@ -19,7 +19,6 @@ st.markdown("""
     div.stButton > button:hover { background-color: #cc0000; color: white; }
     h1 { text-align: center; border-bottom: 2px solid #cc0000; padding-bottom: 10px; }
     .status-card { background-color: #1e2129; border-radius: 10px; padding: 20px; border-top: 4px solid #cc0000; }
-    /* Estilo para el buscador */
     .stTextInput > div > div > input { background-color: #1e2129; color: white; border: 1px solid #cc0000; }
     </style>
     """, unsafe_allow_html=True)
@@ -59,7 +58,6 @@ else:
     st.subheader("👥 Registro de Jugadores")
     busqueda = st.text_input("🔍 Buscar jugador por nombre...", "").upper()
     
-    # Filtrar nombres según búsqueda
     nombres_filtrados = [n for n in nombres_fijos if busqueda in n]
     
     cols = st.columns(6)
@@ -82,24 +80,23 @@ else:
 
         st.subheader("📊 Comparativa: Jugador vs. Promedio Equipo")
         
-        # Filtros de Gráfico
         f_col1, f_col2 = st.columns(2)
         with f_col1:
-            seleccionados = st.multiselect("Seleccionar Jugadores", options=sorted(df['Nombre'].unique()), default=sorted(df['Nombre'].unique())[:3])
+            # Lista de jugadores únicos para el buscador de gráfico
+            opciones = sorted(df['Nombre'].unique())
+            seleccionados = st.multiselect("Seleccionar Jugadores para comparar", options=opciones, default=opciones[:1] if opciones else [])
         with f_col2:
-            dias_atras = st.slider("Días a mostrar", 1, 14, 7)
+            dias_atras = st.slider("Días a mostrar en historial", 1, 14, 7)
 
         fecha_limite = datetime.now() - timedelta(days=dias_atras)
         df_f = df[df['Fecha'] >= fecha_limite]
 
         if not df_f.empty:
-            # Calcular promedio grupal por día
             promedio_grupal = df_f.groupby('Dia')['Nivel'].mean().reset_index()
-
             fig = go.Figure()
 
-            # Barras para jugadores seleccionados
-            for j en seleccionados:
+            # Barras para jugadores (USA 'in' EN LUGAR DE 'en')
+            for j in seleccionados:
                 df_j = df_f[df_f['Nombre'] == j]
                 fig.add_trace(go.Bar(x=df_j['Dia'], y=df_j['Nivel'], name=j))
 
@@ -119,7 +116,9 @@ else:
         c_list, c_pend = st.columns(2)
         with c_list:
             st.markdown('<div class="status-card">✅ <b>COMPLETADOS:</b></div>', unsafe_allow_html=True)
-            st.dataframe(df_hoy[['Nombre', 'Nivel']].sort_values('Nivel', ascending=False), use_container_width=True, hide_index=True)
+            if not df_hoy.empty:
+                st.dataframe(df_hoy[['Nombre', 'Nivel']].sort_values('Nivel', ascending=False), use_container_width=True, hide_index=True)
+            else: st.write("Aún no hay registros hoy.")
         with c_pend:
             st.markdown('<div class="status-card">❌ <b>PENDIENTES:</b></div>', unsafe_allow_html=True)
             listos = df_hoy['Nombre'].tolist()
@@ -127,4 +126,4 @@ else:
             st.write(", ".join(pendientes) if pendientes else "¡Todo el equipo completado! ✅")
 
     except Exception as e:
-        st.info("Sincronizando datos...")
+        st.info("Esperando que se carguen datos en la base...")
