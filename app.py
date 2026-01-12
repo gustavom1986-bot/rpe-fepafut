@@ -30,7 +30,7 @@ URL_BASE_FORM = f"https://docs.google.com/forms/d/e/1FAIpQLSdfKHr_Ia197fDJysfVVE
 
 nombres_fijos = [
     "EDDIE ROBERTS", "OMAR CORDOBA", "LUIS ASPRILLA", "DANIEL APARICIO", 
-    "ORMAN DAVIS", "RICHARD PERALTA", "JIMAR SANCHEZ", "KEVIN GALVAN", 
+    "ORMAN DAVIS", "RICHARD PERALTA", "AIMAR SANCHEZ", "KEVIN GALVAN", 
     "JORGE GUTIERREZ", "JUAN HALL", "JAVIER RIVERA", "GILBER MURILLO", 
     "ABDUL KNIGHT", "RICARDO PHILLIPS", "GIOVANI HERBERT", "HECTOR HURTADO", 
     "ARIEL ARROYO", "JOVANY WELCH", "GUSTAVO HERRERA", "KIDIR BARRIA", 
@@ -127,3 +127,4 @@ else:
 
     except Exception as e:
         st.info("Esperando que se carguen datos en la base...")
+
