@@ -1,3 +1,8 @@
+else:
+    # Logo y Título
+    logo_url = "https://upload.wikimedia.org/wikipedia/en/thumb/3/30/Panama_national_football_team_crest.svg/1200px-Panama_national_football_team_crest.svg.png"
+    st.image(logo_url, width=100)
+    st.markdown("<h1>⚽ SISTEMA RPE FEPAFUT</h1>", unsafe_allow_html=True)
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -112,4 +117,5 @@ else:
                 st.success("¡Todo el equipo ha completado el registro!")
 
     except Exception as e:
+
         st.info("Sincronizando con la base de datos...")
